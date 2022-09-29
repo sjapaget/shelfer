@@ -15,6 +15,20 @@ RSpec.describe Contributor, type: :model do
       contributor.validate
       expect(contributor.errors[:name]).to_not include("can't be blank")
     end
+
+    it "must be unique" do
+      existing_contributor = Contributor.create!(name: "chuck the-cat", user: test_user)
+
+      duplicate_contributor = Contributor.new
+      duplicate_contributor.user = test_user
+      duplicate_contributor.name = "chuck the-cat"
+      duplicate_contributor.validate
+      expect(duplicate_contributor.errors[:name]).to include("has already been taken")
+
+      duplicate_contributor.name = "Archie the-dog"
+      duplicate_contributor.validate
+      expect(duplicate_contributor.errors[:name]).to_not include("has already been taken")
+    end
   end
 
   describe "#user" do
