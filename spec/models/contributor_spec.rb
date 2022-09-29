@@ -17,7 +17,8 @@ RSpec.describe Contributor, type: :model do
     end
 
     it "must be unique" do
-      existing_contributor = Contributor.create!(name: "chuck the-cat", user: test_user)
+      # create a user in the db so that the name is already taken
+      Contributor.create!(name: "chuck the-cat", user: test_user)
 
       duplicate_contributor = Contributor.new
       duplicate_contributor.user = test_user
