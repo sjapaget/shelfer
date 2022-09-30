@@ -1,34 +1,47 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  context "to be valid" do
-    it "must have a first_name" do
-      test_user = User.new(last_name: "the-cat", email: "chuck-the-cat@cats.fr", password: "123456")
-      expect { User.create!(test_user).to raise_error(ActiveRecord::RecordInvalid) }
-    end
 
-    it "must have a last_name" do
-      test_user = User.new(first_name: "chuck", email: "chuck-the-cat@cats.fr", password: "123456")
-      expect { User.create!(test_user).to raise_error(ActiveRecord::RecordInvalid) }
-    end
+  describe "#first_name" do
+    it 'validates presence' do
+      user = User.new(email: "user@user.fr", password: "12345", last_name: "the-cat")
+      user.validate
+      expect(user.errors[:first_name]).to include("can't be blank")
 
-    it "must have an email" do
-      test_user = User.new(first_name: "chuck", last_name: "the-cat", password: "123456")
-      expect { User.create!(test_user).to raise_error(ActiveRecord::RecordInvalid) }
-    end
-
-    it "must have a password" do
-      test_user = User.new(first_name: "chuck", last_name: "chuck-the-cat@cats.fr", email: "chuck-the-cat@cats.fr")
-      expect { User.create!(test_user).to raise_error(ActiveRecord::RecordInvalid) }
+      user.first_name = "chuck"
+      user.validate
+      expect(user.errors[:first_name]).to_not include("can't be blank")
     end
   end
 
-  context "has the methods" do
-    test_user = User.new(first_name: "chuck", last_name: "the-cat", email: "chuck-the-cat@cats.fr", password: "123456")
-    describe "#full_name" do
-      it "returns capitalised full name" do
-        expect(test_user.full_name).to eq("Chuck The-cat")
-      end
+  describe "#last_name" do
+    it 'validates presence' do
+      user = User.new(email: "user@user.fr", password: "12345", first_name: "chuck")
+      user.validate
+      expect(user.errors[:last_name]).to include("can't be blank")
+
+      user.last_name = "the-cat"
+      user.validate
+      expect(user.errors[:last_name]).to_not include("can't be blank")
+    end
+  end
+
+  describe "#email" do
+    it 'validates presence' do
+      user = User.new(password: "12345", first_name: "chuck", last_name: "the-cat")
+      user.validate
+      expect(user.errors[:email]).to include("can't be blank")
+
+      user.email = "the-cat"
+      user.validate
+      expect(user.errors[:email]).to_not include("can't be blank")
+    end
+  end
+
+  describe "#full_name" do
+    it "returns capitalised full name" do
+      test_user = User.new(first_name: "chuck", last_name: "the-cat", email: "chuck@catmail.fr", password: "123456")
+      expect(test_user.full_name).to eq("Chuck The-cat")
     end
   end
 end
