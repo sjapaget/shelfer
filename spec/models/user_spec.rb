@@ -36,6 +36,17 @@ RSpec.describe User, type: :model do
       user.validate
       expect(user.errors[:email]).to_not include("can't be blank")
     end
+
+    it "validates uniqueness" do
+      User.create!(email: "chuck@catmail.fr", password: "12345", first_name: "chuck", last_name: "the-cat")
+      user = User.new(email: "chuck@catmail.fr", password: "12345", first_name: "chuck", last_name: "the-cat")
+      user.validate
+      expect(user.errors[:email]).to include("has already been taken")
+
+      user.email = "chucks-other-email@catmail.fr"
+      user.validate
+      expect(user.errors[:email]).to_not include("has already been taken")
+    end
   end
 
   describe "#full_name" do
