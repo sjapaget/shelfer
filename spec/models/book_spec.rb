@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Book, type: :model do
-
   describe "#title" do
     it 'validates presence' do
       book = Book.new
