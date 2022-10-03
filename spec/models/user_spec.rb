@@ -4,7 +4,7 @@ RSpec.describe User, type: :model do
 
   describe "#first_name" do
     it 'validates presence' do
-      user = User.new(email: "user@user.fr", password: "12345", last_name: "the-cat")
+      user = User.new(email: "user@user.fr", password: "123456", last_name: "the-cat")
       user.validate
       expect(user.errors[:first_name]).to include("can't be blank")
 
@@ -16,7 +16,7 @@ RSpec.describe User, type: :model do
 
   describe "#last_name" do
     it 'validates presence' do
-      user = User.new(email: "user@user.fr", password: "12345", first_name: "chuck")
+      user = User.new(email: "user@user.fr", password: "123456", first_name: "chuck")
       user.validate
       expect(user.errors[:last_name]).to include("can't be blank")
 
@@ -28,7 +28,7 @@ RSpec.describe User, type: :model do
 
   describe "#email" do
     it 'validates presence' do
-      user = User.new(password: "12345", first_name: "chuck", last_name: "the-cat")
+      user = User.new(password: "123456", first_name: "chuck", last_name: "the-cat")
       user.validate
       expect(user.errors[:email]).to include("can't be blank")
 
@@ -38,8 +38,8 @@ RSpec.describe User, type: :model do
     end
 
     it "validates uniqueness" do
-      User.create!(email: "chuck@catmail.fr", password: "12345", first_name: "chuck", last_name: "the-cat")
-      user = User.new(email: "chuck@catmail.fr", password: "12345", first_name: "chuck", last_name: "the-cat")
+      User.create!(email: "chuck@catmail.fr", password: "123456", first_name: "chuck", last_name: "the-cat")
+      user = User.new(email: "chuck@catmail.fr", password: "123456", first_name: "chuck", last_name: "the-cat")
       user.validate
       expect(user.errors[:email]).to include("has already been taken")
 
