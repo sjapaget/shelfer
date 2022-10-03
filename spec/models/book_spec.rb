@@ -22,7 +22,7 @@ RSpec.describe Book, type: :model do
 
       book.number_of_pages = "123"
       book.validate
-      expect(book.errors[:last_name]).to_not include("can't be blank")
+      expect(book.errors[:number_of_pages]).to_not include("can't be blank")
     end
   end
 
