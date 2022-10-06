@@ -1,1 +1,1 @@
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+Shelfer is a platform to store books you'd like to read, have read or are currently reading, to comment on them and share your opinion with other users.
