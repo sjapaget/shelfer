@@ -23,26 +23,6 @@ RSpec.describe Placement, type: :model do
     description: "A collection of Classics I'd like to read"
   )
 
-  it "must be unique in the scope of the shelf" do
-    existing_placement = Placement.create!(
-      book: test_book,
-      shelf: test_shelf
-    )
-    duplicate_placement = Placement.new(
-      book: test_book,
-      shelf: test_shelf
-    )
-    
-    duplicate_placement.validate
-    expect(duplicate_placement.errors[:book]).to include("has already been taken")
-
-    duplicate_placement.book = alt_test_book
-    expect(duplicate_placement.errors[:book]).to_not include("has already been taken")
-
-    duplicate_placement.destroy
-    existing_placement.destroy
-  end
-
   describe "#book" do
     it "validates presence" do
       placement = Placement.new
@@ -69,7 +49,7 @@ RSpec.describe Placement, type: :model do
     end
   end
 
-  test_book.destroy
+  # test_book.destroy
   alt_test_book.destroy
   test_shelf.destroy
   test_user.destroy
