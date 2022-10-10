@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_06_152950) do
+
+ActiveRecord::Schema[7.0].define(version: 2022_10_06_160608) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +24,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_06_152950) do
     t.text "blurb"
   end
 
+  create_table "contributions", force: :cascade do |t|
+    t.bigint "book_id", null: false
+    t.bigint "contributor_id", null: false
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_contributions_on_book_id"
+    t.index ["contributor_id"], name: "index_contributions_on_contributor_id"
+  end
+
   create_table "contributors", force: :cascade do |t|
     t.string "name"
     t.bigint "user_id", null: false
@@ -30,9 +42,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_06_152950) do
     t.index ["user_id"], name: "index_contributors_on_user_id"
   end
 
+
   create_table "reviews", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "placements", force: :cascade do |t|
+    t.bigint "book_id", null: false
+    t.bigint "shelf_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_placements_on_book_id"
+    t.index ["shelf_id"], name: "index_placements_on_shelf_id"
   end
 
   create_table "shelves", force: :cascade do |t|
@@ -52,12 +74,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_06_152950) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "first_name", null: false
-    t.string "last_name", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "contributions", "books"
+  add_foreign_key "contributions", "contributors"
   add_foreign_key "contributors", "users"
+  add_foreign_key "placements", "books"
+  add_foreign_key "placements", "shelves"
   add_foreign_key "shelves", "users"
 end
