@@ -3,5 +3,6 @@ class Placement < ApplicationRecord
   belongs_to :shelf
 
   validates :book, :shelf, presence: true
-  validates :book, uniqueness: { scope: :shelf, message: "#{book} is already on #{shelf}" }
+
+  validates :book, uniqueness: { scope: :shelf, message: "This book has already been added to this shelf" }
 end
