@@ -71,6 +71,21 @@ puts "Creating books, contributors and contributions"
     contributor: contributor,
     role: "author"
   )
+
+  additional_contributor_chance = rand
+
+  if additional_contributor_chance > 0.5
+    additional_contributor = Contributor.create!(
+      user: User.all.sample,
+      name: Faker::Book.unique.author
+    )
+
+    Contribution.create!(
+      book: book,
+      contributor: additional_contributor,
+      role: Contribution::ROLES.sample()
+    )
+  end
 end
 
 puts "#{Book.all.length} books, #{Contributor.all.length} contributors, and #{Contribution.all.length} contributions created successfully"
