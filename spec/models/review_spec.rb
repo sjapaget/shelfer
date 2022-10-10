@@ -5,7 +5,7 @@ RSpec.describe Review, type: :model do
     it 'validates presence' do
       review = Review.new
       review.validate
-      expect(review.errors[:content]).to include("a great book")
+      expect(review.errors[:content]).to include("can't be blank")
 
       review.content = "a great book"
       review.validate
@@ -17,7 +17,7 @@ RSpec.describe Review, type: :model do
     it 'validates presence' do
       review = Review.new
       review.validate
-      expect(review.errors[:rating]).to include("4")
+      expect(review.errors[:rating]).to include("can't be blank")
 
       review.rating = "4"
       review.validate
