@@ -4,5 +4,11 @@ Rails.application.routes.draw do
 
   resources :books, only: [:index, :show]
 
-  resources :shelves, only: %I[index]
+  namespace :api do
+    namespace :v1 do
+      resources :users do
+        resources :shelves, only: %I[index]
+      end
+    end
+  end
 end
