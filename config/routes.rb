@@ -6,9 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users do
-        resources :shelves, only: %I[index]
-      end
+      resources :shelves, only: %I[index]
     end
   end
 end
