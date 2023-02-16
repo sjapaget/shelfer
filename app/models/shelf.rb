@@ -4,4 +4,8 @@ class Shelf < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :description, presence: true
+
+  def contents
+    placements.all
+  end
 end
