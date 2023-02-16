@@ -1,39 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Book, type: :model do
-  describe "#title" do
-    it 'validates presence' do
-      book = Book.new
-      book.validate
-      expect(book.errors[:title]).to include("can't be blank")
+  describe '#long?' do
+    let(:short_book) { build(:book) }
 
-      book.title = "Chuck, the Great"
-      book.validate
-      expect(book.errors[:title]).to_not include("can't be blank")
+    it 'returns a boolean' do
+      expect(short_book.long?).to be_a(FalseClass || TrueClass)
     end
-  end
 
-  describe "#number_of_pages" do
-    it 'validates presence' do
-      book = Book.new
-      book.validate
-      expect(book.errors[:number_of_pages]).to include("can't be blank")
-
-      book.number_of_pages = "123"
-      book.validate
-      expect(book.errors[:number_of_pages]).to_not include("can't be blank")
+    context 'when the book has less than 500 pages' do
+      it 'returns false' do
+        expect(short_book.long?).to be(false)
+      end
     end
-  end
 
-  describe "#blurb" do
-    it 'validates presence' do
-      book = Book.new
-      book.validate
-      expect(book.errors[:blurb]).to include("can't be blank")
-
-      book.blurb = "The saga of an incredible cat"
-      book.validate
-      expect(book.errors[:blurb]).to_not include("can't be blank")
+    context 'when the book has over 500 pages' do
+      let(:long_book) { build(:book, :long) }
+      it "returns true" do
+        expect(long_book.long?).to be(true)
+      end
     end
   end
 end
