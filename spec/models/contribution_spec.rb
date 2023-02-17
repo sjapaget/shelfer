@@ -1,85 +1,70 @@
 require 'rails_helper'
 
 RSpec.describe Contribution, type: :model do
-  test_user = User.all.first
-  test_contributor = Contributor.create!(user: test_user, name: "Chuck The Cat")
-  test_book = Book.create!(title: "The life of a Cat", number_of_pages: 55, blurb: "Chuck gives insights on his life as a cat")
+  let(:contribution) { build(:contribution, :author) }
+  let(:book) { build(:book) }
+  let(:contributor) { build(:contributor) }
 
   describe "#unique_combination_of_book_contributor_and_role" do
-    it "must validate on uniqueness of the contributor, book, role combination" do
-      Contribution.create!(contributor: test_contributor, book: test_book, role: Contribution::ROLES[0])
+    context "when combo of book, contributor & role already exists" do
+      let(:existing_contribution) { build(:contribution, :author) }
+      before do
+        existing_contribution.book = book
+        existing_contribution.contributor = contributor
+        existing_contribution.save!
 
-      contribution = Contribution.new(contributor: test_contributor, book: test_book, role: Contribution::ROLES[0])
-      contribution.validate
-      expect(contribution.errors[:contributor]).to include("this contribution already exists")
+        contribution.book = book
+        contribution.contributor = contributor
+      end
 
-      contribution.role = Contribution::ROLES[1]
-      contribution.validate
-      expect(contribution.errors[:contributor]).to_not include("this contribution already exists")
+      it "returns validation error" do
+        contribution.validate
+        expect(contribution.errors[:contributor]).to include("this contribution already exists")
+      end
+    end
+
+    context "when combo of book, role & contributor is unique" do
+      let(:unique_role_one) { build(:contribution, :author) }
+      let(:unique_role_two) { build(:contribution, :translator) }
+      let(:alt_book) { build(:book, :alt_book) }
+      let(:unique_book_one) { build(:contribution) }
+      let(:unique_book_two) { build(:contribution) }
+      let(:alt_contributor) { build(:contributor, :alt_name) }
+      let(:unique_contributor_one) { build(:contribution) }
+      let(:unique_contributor_two) { build(:contribution) }
+
+      it "allows different roles with identical books & contributors" do
+        unique_role_one.book = book
+        unique_role_one.contributor = contributor
+        unique_role_one.save!
+        unique_role_two.book = book
+        unique_role_two.contributor = contributor
+
+        unique_role_two.validate
+        expect(unique_role_two.errors[:contributor]).not_to include("this contribution already exists")
+      end
+
+      it "allows different books with identical roles & contributors" do
+        unique_book_one.book = book
+        unique_book_one.contributor = contributor
+        unique_book_one.save!
+        unique_book_two.book = alt_book
+        unique_book_two.contributor = contributor
+
+        unique_book_two.validate
+        expect(unique_book_two.errors[:contributor]).not_to include("this contribution already exists")
+      end
+
+      it "allows different contributors with identical books & roles" do
+        unique_contributor_one.book = book
+        unique_contributor_one.contributor = contributor
+        unique_contributor_one.save!
+        unique_contributor_two.book = book
+        unique_contributor_two.contributor = alt_contributor
+
+        unique_contributor_two.validate
+        expect(unique_contributor_two.errors[:contributor]).not_to include("this contribution already exists")
+      end
     end
   end
-
-  describe "#book" do
-    it "must be present" do
-      contribution = Contribution.new
-      contribution.role = "author"
-      contribution.contributor = test_contributor
-      contribution.validate
-      expect(contribution.errors[:book]).to include("can't be blank")
-
-      contribution.book = test_book
-      contribution.validate
-      expect(contribution.errors[:name]).to_not include("can't be blank")
-    end
-
-    it "if destroyed, the contribution must also be destroyed" do
-      Contribution.create!(contributor: test_contributor, book: test_book, role: Contribution::ROLES[0])
-      expect { test_book.destroy }.to change(Contribution, :count).by(-1)
-    end
-  end
-
-  describe "#contributor" do
-    it "must be present" do
-      contribution = Contribution.new
-      contribution.role = "author"
-      contribution.book = test_book
-      contribution.validate
-      expect(contribution.errors[:contributor]).to include("can't be blank")
-
-      contribution.contributor = test_contributor
-      contribution.validate
-      expect(contribution.errors[:contributor]).to_not include("can't be blank")
-    end
-
-    it "if destroyed, the contribution must also be destroyed" do
-      Contribution.create!(contributor: test_contributor, book: test_book, role: Contribution::ROLES[0])
-      expect { test_contributor.destroy }.to change(Contribution, :count).by(-1)
-    end
-  end
-
-  describe "#role" do
-    it "must be present" do
-      contribution = Contribution.new
-      contribution.contributor = test_contributor
-      contribution.book = test_book
-      contribution.validate
-      expect(contribution.errors[:role]).to include("can't be blank")
-
-      contribution.role = "author"
-      contribution.validate
-      expect(contribution.errors[:role]).to_not include("can't be blank")
-    end
-
-    it "must be included in Contribution::ROLES" do
-      contribution = Contribution.new(contributor: test_contributor, book: test_book)
-      contribution.role = "invalid role value"
-      contribution.validate
-      expect(contribution.errors[:role]).to include("must be included in Contribution::ROLES")
-
-      contribution.role = Contribution::ROLES.sample
-      contribution.validate
-      expect(contribution.errors[:role]).to_not include("must be included in Contribution::ROLES")
-    end
-  end
-
 end

@@ -4,4 +4,9 @@ class Shelf < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :description, presence: true
+
+  def titles
+     titles = placements.map { |placement| placement.book.title }
+     titles.empty? ? 'Shelf empty' : titles
+  end
 end
