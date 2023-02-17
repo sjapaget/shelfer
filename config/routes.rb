@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :shelves, only: %I[index]
-      resources :books, only: [:index, :show]
+      resources :books, only: %I[index show]
     end
   end
 end
