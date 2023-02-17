@@ -8,4 +8,10 @@ FactoryBot.define do
   trait :long do
     number_of_pages { 700 }
   end
+
+  trait :alt_book do
+    title { 'The Book of Testing: Vol. 2' }
+    blurb { "Ok, so the first book didn't quite have it all..." }
+    number_of_pages { 15 }
+  end
 end
