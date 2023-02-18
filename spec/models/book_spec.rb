@@ -45,9 +45,13 @@ RSpec.describe Book, type: :model do
       contribution_translator.save!
 
       contribution_two_a.contributor = author_one
-      contribution_two_b.contributor = author_two
       contribution_two_a.book = multi_authors_book
+      contribution_two_a.save!
+      
+      author_two.user = alt_user
+      contribution_two_b.contributor = author_two
       contribution_two_b.book = multi_authors_book
+      contribution_two_b.save!
     end
 
     it 'lists all the authors' do

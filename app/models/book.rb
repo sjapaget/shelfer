@@ -8,4 +8,9 @@ class Book < ApplicationRecord
   def long?
     number_of_pages > 500
   end
+
+  def authors
+    author_contributions = contributions.where(role: 'author')
+    author_contributions.map(&:contributor)
+  end
 end
