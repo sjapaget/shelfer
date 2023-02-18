@@ -10,7 +10,7 @@ class Book < ApplicationRecord
   end
 
   def contributors
-    contributions.map(&:contributor)
+    contributions.includes(:contributor).map(&:contributor)
   end
 
   def authors
