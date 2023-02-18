@@ -24,10 +24,10 @@ RSpec.describe Book, type: :model do
 
   describe '#contributors' do
     let(:book) { create(:book) }
-    let(:author) { create(:contributor, :author) }
-    let(:editor) { create(:contributor, :editor) }
-    let(:contribution) { create(:contribution, contributor: author, book: book) }
-    let(:other_contribution) { create(:contribution, contributor: editor, book: book) }
+    let(:author) { create(:contributor) }
+    let(:editor) { create(:contributor, :alt_name, user: create(:user, :alt)) }
+    let!(:contribution) { create(:contribution, :author, contributor: author, book: book) }
+    let!(:other_contribution) { create(:contribution, :editor, contributor: editor, book: book) }
 
     it "Returns all a book contributors" do
       expect(book.contributors).to include(author, editor)
