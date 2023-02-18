@@ -22,6 +22,18 @@ RSpec.describe Book, type: :model do
     end
   end
 
+  describe '#contributors' do
+    let(:book) { create(:book) }
+    let(:author) { create(:contributor, :author) }
+    let(:editor) { create(:contributor, :editor) }
+    let(:contribution) { create(:contribution, contributor: author, book: book) }
+    let(:other_contribution) { create(:contribution, contributor: editor, book: book) }
+
+    it "Returns all a book contributors" do
+      expect(book.contributors).to include(author, editor)
+    end
+  end
+
   describe '#authors' do
     let(:single_author_book) { build(:book) }
     let(:multi_authors_book) { build(:book) }
@@ -47,7 +59,7 @@ RSpec.describe Book, type: :model do
       contribution_two_a.contributor = author_one
       contribution_two_a.book = multi_authors_book
       contribution_two_a.save!
-      
+
       author_two.user = alt_user
       contribution_two_b.contributor = author_two
       contribution_two_b.book = multi_authors_book
