@@ -21,4 +21,48 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe '#authors' do
+    let(:single_author_book) { build(:book) }
+    let(:multi_authors_book) { build(:book) }
+    let(:author_one) { build(:contributor) }
+    let(:author_two) { build(:contributor, :alt_name) }
+    let(:translator) { build(:contributor, name: 'Tina the Translator') }
+    let(:contribution_one) { build(:contribution, :author) }
+    let(:contribution_two_a) { build(:contribution, :author) }
+    let(:contribution_two_b) { build(:contribution, :author) }
+    let(:contribution_translator) { build(:contribution, :translator) }
+    let(:alt_user) { build(:user, :alt) }
+
+    before do
+      contribution_one.book = single_author_book
+      contribution_one.contributor = author_one
+      contribution_one.save!
+
+      contribution_translator.book = single_author_book
+      translator.user = alt_user
+      contribution_translator.contributor = translator
+      contribution_translator.save!
+
+      contribution_two_a.contributor = author_one
+      contribution_two_b.contributor = author_two
+      contribution_two_a.book = multi_authors_book
+      contribution_two_b.book = multi_authors_book
+    end
+
+    it 'lists all the authors' do
+      book_author = single_author_book.authors
+      expect(book_author.count).to eq(1)
+      expect(book_author).to include(author_one)
+
+      multi_book_authors = multi_authors_book.authors
+      expect(multi_book_authors.count).to be > 1
+      expect(multi_book_authors).to include(author_one, author_two)
+    end
+
+    it "doesn't return non-author contributors" do
+      book_author = single_author_book.authors
+      expect(book_author).not_to include(translator)
+    end
+  end
 end
