@@ -6,6 +6,9 @@ class Contribution < ApplicationRecord
   validates :book, :contributor, :role, presence: true
   validate :unique_combination_of_book_contributor_and_role
 
+  def name
+    contributor.name
+  end
 
   private
 

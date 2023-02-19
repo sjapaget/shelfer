@@ -67,4 +67,12 @@ RSpec.describe Contribution, type: :model do
       end
     end
   end
+
+  describe "#name" do
+    let(:contributor) { build(:contributor) }
+    let(:contribution) { build(:contribution, contributor: contributor) }
+    it 'returns the contributor name' do
+      expect(contribution.name).to eq(contributor.name)
+    end
+  end
 end

@@ -4,4 +4,9 @@ class Contributor < ApplicationRecord
 
   validates :name, :user, presence: true
   validates :name, uniqueness: true
+
+  def role(book)
+    contributions = book.contributions.where(contributor: self)
+    contributions.map(&:role)
+  end
 end

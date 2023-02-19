@@ -8,4 +8,13 @@ class Book < ApplicationRecord
   def long?
     number_of_pages > 500
   end
+
+  def contributors
+    contributions.includes(:contributor)
+                 .map { |contribution| { role: contribution.role, name: contribution.contributor.name } }
+  end
+
+  def authors
+    contributors.select { |contributor| contributor[:role] == 'author' }
+  end
 end
