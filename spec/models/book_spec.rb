@@ -9,6 +9,7 @@ RSpec.describe Book, type: :model do
     end
 
     context 'when the book has less than 500 pages' do
+
       it 'returns false' do
         expect(short_book.long?).to be(false)
       end
@@ -16,6 +17,7 @@ RSpec.describe Book, type: :model do
 
     context 'when the book has over 500 pages' do
       let(:long_book) { build(:book, :long) }
+
       it "returns true" do
         expect(long_book.long?).to be(true)
       end
@@ -23,10 +25,10 @@ RSpec.describe Book, type: :model do
   end
 
   describe '#contributors' do
-    let(:book) { create(:book) }
-    let(:book_author) { create(:contributor) }
-    let(:book_editor) { create(:contributor, :alt_name, user: create(:user, :alt)) }
-    let!(:contribution) { create(:contribution, :author, contributor: book_author, book: book) }
+    let(:book)                { create(:book) }
+    let(:book_author)         { create(:contributor) }
+    let(:book_editor)         { create(:contributor, :alt_name, user: create(:user, :alt)) }
+    let!(:contribution)       { create(:contribution, :author, contributor: book_author, book: book) }
     let!(:other_contribution) { create(:contribution, :editor, contributor: book_editor, book: book) }
 
     it "Returns the roles and names of all the books contributors" do
@@ -37,25 +39,25 @@ RSpec.describe Book, type: :model do
   end
 
   describe '#authors' do
-    let(:alt_user) { create(:user, :alt) }
-    let(:single_author_book) { build(:book) }
-    let(:multi_authors_book) { build(:book) }
-    let(:author_one) { build(:contributor) }
-    let(:author_two) { build(:contributor, :alt_name, user: alt_user) }
-    let(:translator) { build(:contributor, name: 'Tina the Translator', user: alt_user) }
-    let!(:contribution_one) { create(:contribution, :author, contributor: author_one, book: single_author_book) }
-    let!(:contribution_two_a) { create(:contribution, :author, contributor: author_one, book: multi_authors_book) }
-    let!(:contribution_two_b) { create(:contribution, :author, contributor: author_two, book: multi_authors_book) }
-    let!(:contribution_translator) { create(:contribution, :translator, contributor: translator, book: single_author_book) }
+    let(:alt_user)             { create(:user, :alt) }
+    let(:single_author_book)   { build(:book) }
+    let(:multi_authors_book)   { build(:book) }
+    let(:author_one)           { build(:contributor) }
+    let(:author_two)           { build(:contributor, :alt_name, user: alt_user) }
+    let(:translator)           { build(:contributor, name: 'Tina the Translator', user: alt_user) }
+    let!(:contribution_1)      { create(:contribution, :author, contributor: author_one, book: single_author_book) }
+    let!(:contribution_2a)     { create(:contribution, :author, contributor: author_one, book: multi_authors_book) }
+    let!(:contribution_2b)     { create(:contribution, :author, contributor: author_two, book: multi_authors_book) }
+    let!(:contribution_trans)  { create(:contribution, :translator, contributor: translator, book: single_author_book) }
 
     it 'lists all the authors' do
       book_author = single_author_book.authors
       expect(book_author.count).to eq(1)
-      expect(book_author).to include(author_one)
+      expect(book_author).to contain_exactly(author_one)
 
       multi_book_authors = multi_authors_book.authors
       expect(multi_book_authors.count).to be > 1
-      expect(multi_book_authors).to include(author_one, author_two)
+      expect(multi_book_authors).to contain_exactly(author_one, author_two)
     end
 
     it "doesn't return non-author contributors" do
