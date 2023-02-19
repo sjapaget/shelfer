@@ -10,7 +10,12 @@ class Book < ApplicationRecord
   end
 
   def contributors
-    contributions.includes(:contributor).map(&:contributor)
+    contribs = contributions.includes(:contributor).map do |contribution|
+      { contribution.role => contribution.contributor.name }
+    end
+    hash = {}
+    contribs.each { |c| hash.merge!(c) }
+    hash
   end
 
   def authors

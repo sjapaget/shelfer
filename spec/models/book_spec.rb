@@ -24,13 +24,15 @@ RSpec.describe Book, type: :model do
 
   describe '#contributors' do
     let(:book) { create(:book) }
-    let(:author) { create(:contributor) }
-    let(:editor) { create(:contributor, :alt_name, user: create(:user, :alt)) }
-    let!(:contribution) { create(:contribution, :author, contributor: author, book: book) }
-    let!(:other_contribution) { create(:contribution, :editor, contributor: editor, book: book) }
+    let(:book_author) { create(:contributor) }
+    let(:book_editor) { create(:contributor, :alt_name, user: create(:user, :alt)) }
+    let!(:contribution) { create(:contribution, :author, contributor: book_author, book: book) }
+    let!(:other_contribution) { create(:contribution, :editor, contributor: book_editor, book: book) }
 
-    it "Returns all a book contributors" do
-      expect(book.contributors).to include(author, editor)
+    it "Returns the roles and names of all the books contributors" do
+      contribs = { contribution.role => book_author.name, other_contribution.role => book_editor.name }
+      p book.contributors
+      expect(book.contributors).to include(contribs)
     end
   end
 
