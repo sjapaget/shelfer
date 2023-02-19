@@ -10,15 +10,11 @@ class Book < ApplicationRecord
   end
 
   def contributors
-    role_name_pairs = {}
     contributions.includes(:contributor)
-                 .map { |contribution| { contribution.role => contribution.contributor.name } }
-                 .each { |key_val| hash.merge!(key_val) }
-    role_name_pairs
+                 .map { |contribution| { role: contribution.role, name: contribution.contributor.name } }
   end
 
   def authors
-    author_contributions = contributions.where(role: 'author')
-    author_contributions.map(&:contributor)
+    contributors.select { |contributor| contributor[:role] == 'author' }
   end
 end

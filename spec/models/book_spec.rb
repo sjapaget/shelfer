@@ -32,9 +32,12 @@ RSpec.describe Book, type: :model do
     let!(:other_contribution) { create(:contribution, :editor, contributor: book_editor, book: book) }
 
     it "Returns the roles and names of all the books contributors" do
-      contribs = { contribution.role => book_author.name, other_contribution.role => book_editor.name }
-      p book.contributors
-      expect(book.contributors).to include(contribs)
+      contribs = [
+        { role: contribution.role, name: book_author.name },
+        { role: other_contribution.role, name: book_editor.name }
+      ]
+
+      expect(book.contributors).to contain_exactly(contribs[0], contribs[1])
     end
   end
 
@@ -42,7 +45,7 @@ RSpec.describe Book, type: :model do
     let(:alt_user)             { create(:user, :alt) }
     let(:single_author_book)   { build(:book) }
     let(:multi_authors_book)   { build(:book) }
-    let(:author_one)           { build(:contributor) }
+    let(:author_one)           { build(:contributor, user: alt_user) }
     let(:author_two)           { build(:contributor, :alt_name, user: alt_user) }
     let(:translator)           { build(:contributor, name: 'Tina the Translator', user: alt_user) }
     let!(:contribution_1)      { create(:contribution, :author, contributor: author_one, book: single_author_book) }
@@ -50,19 +53,21 @@ RSpec.describe Book, type: :model do
     let!(:contribution_2b)     { create(:contribution, :author, contributor: author_two, book: multi_authors_book) }
     let!(:contribution_trans)  { create(:contribution, :translator, contributor: translator, book: single_author_book) }
 
-    it 'lists all the authors' do
+    it 'Returns the roles and names of all the books authors' do
       book_author = single_author_book.authors
-      expect(book_author.count).to eq(1)
-      expect(book_author).to contain_exactly(author_one)
+      expect(book_author).to include({ role: contribution_1.role, name: author_one.name })
 
+      contribs = [
+        { role: contribution_2a.role, name: author_one.name },
+        { role: contribution_2b.role, name: author_two.name }
+      ]
       multi_book_authors = multi_authors_book.authors
-      expect(multi_book_authors.count).to be > 1
-      expect(multi_book_authors).to contain_exactly(author_one, author_two)
+      expect(multi_book_authors).to contain_exactly(contribs[0], contribs[1])
     end
 
     it "doesn't return non-author contributors" do
       book_author = single_author_book.authors
-      expect(book_author).not_to include(translator)
+      expect(book_author).not_to include({ role: contribution_trans.role, name: translator.name })
     end
   end
 end
