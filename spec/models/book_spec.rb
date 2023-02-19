@@ -37,36 +37,16 @@ RSpec.describe Book, type: :model do
   end
 
   describe '#authors' do
+    let(:alt_user) { create(:user, :alt) }
     let(:single_author_book) { build(:book) }
     let(:multi_authors_book) { build(:book) }
     let(:author_one) { build(:contributor) }
-    let(:author_two) { build(:contributor, :alt_name) }
-    let(:translator) { build(:contributor, name: 'Tina the Translator') }
-    let(:contribution_one) { build(:contribution, :author) }
-    let(:contribution_two_a) { build(:contribution, :author) }
-    let(:contribution_two_b) { build(:contribution, :author) }
-    let(:contribution_translator) { build(:contribution, :translator) }
-    let(:alt_user) { build(:user, :alt) }
-
-    before do
-      contribution_one.book = single_author_book
-      contribution_one.contributor = author_one
-      contribution_one.save!
-
-      contribution_translator.book = single_author_book
-      translator.user = alt_user
-      contribution_translator.contributor = translator
-      contribution_translator.save!
-
-      contribution_two_a.contributor = author_one
-      contribution_two_a.book = multi_authors_book
-      contribution_two_a.save!
-
-      author_two.user = alt_user
-      contribution_two_b.contributor = author_two
-      contribution_two_b.book = multi_authors_book
-      contribution_two_b.save!
-    end
+    let(:author_two) { build(:contributor, :alt_name, user: alt_user) }
+    let(:translator) { build(:contributor, name: 'Tina the Translator', user: alt_user) }
+    let!(:contribution_one) { create(:contribution, :author, contributor: author_one, book: single_author_book) }
+    let!(:contribution_two_a) { create(:contribution, :author, contributor: author_one, book: multi_authors_book) }
+    let!(:contribution_two_b) { create(:contribution, :author, contributor: author_two, book: multi_authors_book) }
+    let!(:contribution_translator) { create(:contribution, :translator, contributor: translator, book: single_author_book) }
 
     it 'lists all the authors' do
       book_author = single_author_book.authors
