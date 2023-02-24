@@ -1,17 +1,30 @@
 require 'rails_helper'
 
-RSpec.describe "Books", type: :request do
+RSpec.describe "/api/v1/books", type: :request do
+  let(:user) { create(:user) }
+  let!(:book) { create(:book) }
   describe "GET /index" do
-    let(:user) { create(:user) }
-    let!(:book) { create(:book) }
     before do
       sign_in user
+      get api_v1_books_path
     end
 
-    it "displays all the books" do
-      get api_v1_books_path
-      expect(response).to have_http_status(:ok)
+    it "renders a successful resonse" do
+      expect(response).to be_successful
+    end
+    it "includes the details of all existing books" do
       expect(response.body).to include(book.title)
+    end
+  end
+
+  describe "GET /show" do
+    before do
+      sign_in user
+      get api_v1_book_path(book)
+    end
+
+    it "renders a successful response" do
+      expect(response).to be_successful
     end
   end
 end
