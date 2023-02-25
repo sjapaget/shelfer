@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "/api/v1/books", type: :request do
   let(:user) { create(:user) }
-  let!(:book) { create(:book) }
-  let!(:another_book) { create(:book) }
+  let!(:book) { create(:book, user: user) }
+  let!(:another_book) { create(:book, user: user) }
 
   before do
     sign_in user
