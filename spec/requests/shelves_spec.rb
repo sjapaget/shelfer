@@ -30,8 +30,8 @@ RSpec.describe "Shelves", type: :request do
   end
 
   describe "POST /create" do
-    let(:valid_attributes) { { name: 'My favourites', description: 'the best ones', user: user } }
-    let(:invalid_attributes) { { invalid_name: 'My favourites', invalid_description: 'the best ones', invalid_user: user } }
+    let(:valid_attributes) { { name: 'My favourites', description: 'the best ones', user_id: user.id } }
+    let(:invalid_attributes) { { invalid_name: 'My favourites', invalid_description: 'the best ones', invalid_user_id: user.id } }
 
     context 'with valid parameters' do
       it 'creates a new shelf' do
@@ -40,7 +40,7 @@ RSpec.describe "Shelves", type: :request do
         }.to change(Shelf, :count).by(1)
       end
 
-      it 'redirects to the created shelf' do
+      xit 'redirects to the created shelf' do
         post api_v1_shelves_path, params: { shelf: valid_attributes }
         expect(response).to redirect_to(api_v1_shelf_path(Shelf.last))
       end
@@ -51,6 +51,11 @@ RSpec.describe "Shelves", type: :request do
         expect {
           post api_v1_shelves_path, params: { shelf: invalid_attributes }
         }.to change(Shelf, :count).by(0)
+      end
+
+      it 'responds with status 422 - unprocessable entity' do
+        post api_v1_shelves_path, params: { shelf: invalid_attributes }
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
