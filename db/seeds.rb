@@ -83,7 +83,7 @@ puts "Creating books, contributors and contributions"
     Contribution.create!(
       book: book,
       contributor: additional_contributor,
-      role: Contribution::ROLES.sample()
+      role: ['editor', 'author', 'translator'].sample()
     )
   end
 end
