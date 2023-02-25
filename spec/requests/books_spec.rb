@@ -60,6 +60,11 @@ RSpec.describe "/api/v1/books", type: :request do
           post api_v1_books_path, params: { book: invalid_attributes }
         }.to change(Book, :count).by(0)
       end
+
+      it 'responds with status 422 - unprocessable entity' do
+        post api_v1_books_path, params: { book: invalid_attributes }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
   end
 

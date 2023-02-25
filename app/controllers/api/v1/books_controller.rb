@@ -12,8 +12,11 @@ class Api::V1::BooksController < ApiController
   def create
     @book = Book.new(book_params)
 
-    @book.save
-    redirect_to api_v1_book_path(@book)
+    if @book.save
+      redirect_to api_v1_book_path(@book)
+    else
+      render json: @book.errors, status: :unprocessable_entity
+    end
     authorize @book
   end
 
