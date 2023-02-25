@@ -13,7 +13,7 @@ class Api::V1::ShelvesController < ApiController
     @shelf = Shelf.new(shelf_params)
 
     if @shelf.save
-      redirect_to api_v1_shelves_path
+      redirect_to api_v1_shelf_path(@shelf)
     else
       render json: @shelf.errors, status: :unprocessable_entity
     end

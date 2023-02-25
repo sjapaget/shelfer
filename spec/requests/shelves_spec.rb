@@ -54,7 +54,7 @@ RSpec.describe "Shelves", type: :request do
         }.to change(Shelf, :count).by(1)
       end
 
-      xit 'redirects to the created shelf' do
+      it 'redirects to the created shelf' do
         post api_v1_shelves_path, params: { shelf: valid_attributes }
         expect(response).to redirect_to(api_v1_shelf_path(Shelf.last))
       end
