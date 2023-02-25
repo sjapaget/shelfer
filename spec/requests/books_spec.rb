@@ -4,9 +4,11 @@ RSpec.describe "/api/v1/books", type: :request do
   let(:user) { create(:user) }
   let!(:book) { create(:book) }
   let!(:another_book) { create(:book) }
+  before do
+    sign_in user
+  end
   describe "GET /index" do
     before do
-      sign_in user
       get api_v1_books_path
     end
 
@@ -20,7 +22,6 @@ RSpec.describe "/api/v1/books", type: :request do
 
   describe "GET /show" do
     before do
-      sign_in user
       get api_v1_book_path(book)
     end
 
