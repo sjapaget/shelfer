@@ -73,4 +73,27 @@ RSpec.describe "Shelves", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    let!(:shelf_to_delete) { create(:shelf, name: 'delete-able', user: user) }
+    let(:alt_user) { create(:user, :alt, email: 'alt@destroy-shelf.fr') }
+    let!(:permission_denied_shelf) { create(:shelf, name: 'forbidden', user: alt_user) }
+
+    context 'when the shelf belongs to the user' do
+      it 'destroys the shelf' do
+        expect { delete api_v1_shelf_path(shelf_to_delete).to change(Shelf, :count).by(-1) }
+      end
+    end
+
+    context "when the shelf does not belong to the user" do
+      it 'does not destroy the shelf' do
+        expect { delete api_v1_shelf_path(permission_denied_shelf).to change(Shelf, :count).by(0) }
+      end
+
+      it 'response has status 403 - forbidden' do
+        delete api_v1_shelf_path(permission_denied_shelf)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end
