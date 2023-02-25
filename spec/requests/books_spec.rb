@@ -57,7 +57,7 @@ RSpec.describe "/api/v1/books", type: :request do
     context 'with invalid parameters' do
       it "doesn't create a new book" do
         expect {
-          post api_v1_books_path, params: { book: valid_attributes }
+          post api_v1_books_path, params: { book: invalid_attributes }
         }.to change(Book, :count).by(0)
       end
     end
