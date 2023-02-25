@@ -29,6 +29,20 @@ RSpec.describe "Shelves", type: :request do
     end
   end
 
+  describe 'GET /show' do
+    before do
+      get api_v1_shelf_path(shelf)
+    end
+
+    it "renders a successful response" do
+      expect(response).to be_successful
+    end
+
+    it "includes the shelf's details" do
+      expect(response.body).to include(shelf.name)
+    end
+  end
+
   describe "POST /create" do
     let(:valid_attributes) { { name: 'My favourites', description: 'the best ones', user_id: user.id } }
     let(:invalid_attributes) { { invalid_name: 'My favourites', invalid_description: 'the best ones', invalid_user_id: user.id } }
