@@ -7,6 +7,10 @@ class BookPolicy < ApplicationPolicy
     true
   end
 
+  def destroy?
+    user.id == record.user_id
+  end
+
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve

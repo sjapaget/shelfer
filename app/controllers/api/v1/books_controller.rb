@@ -17,6 +17,13 @@ class Api::V1::BooksController < ApiController
     authorize @book
   end
 
+  def destroy
+    @book = Book.find(params[:id])
+    authorize @book
+    @book.destroy
+    redirect_to api_v1_books_path
+  end
+
   private
 
   def book_params
