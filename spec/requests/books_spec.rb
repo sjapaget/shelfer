@@ -12,7 +12,7 @@ RSpec.describe "/api/v1/books", type: :request do
       get api_v1_books_path
     end
 
-    it "renders a successful resonse" do
+    it "renders a successful response" do
       expect(response).to be_successful
     end
     it "includes the details of all existing books" do
