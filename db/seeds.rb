@@ -19,7 +19,7 @@ User.create!(
   first_name: "test1",
   last_name: "profile",
   email: "test1@test.fr",
-  password:"123456"
+  password: "123456"
 )
 puts "Test profile created"
 
@@ -83,7 +83,7 @@ puts "Creating books, contributors and contributions"
     Contribution.create!(
       book: book,
       contributor: additional_contributor,
-      role: Contribution::ROLES.sample()
+      role: ['editor', 'translator', 'author'].sample
     )
   end
 end
