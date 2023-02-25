@@ -6,9 +6,11 @@ RSpec.describe "Shelves", type: :request do
   let!(:another_shelf) { create(:shelf, user: user, name: 'another shelf') }
   let(:other_user) { create(:user, :alt) }
   let!(:unauthorised_shelf) { create(:shelf, user: other_user, name: 'unauthorised shelf') }
+
   before do
     sign_in user
   end
+
   describe "GET /index" do
     before do
       get api_v1_shelves_path
@@ -24,6 +26,32 @@ RSpec.describe "Shelves", type: :request do
 
     it "doesn't return details of other user's shelves" do
       expect(response.body).not_to include(unauthorised_shelf.name)
+    end
+  end
+
+  describe "POST /create" do
+    let(:valid_attributes) { { name: 'My favourites', description: 'the best ones', user: user } }
+    let(:invalid_attributes) { { invalid_name: 'My favourites', invalid_description: 'the best ones', invalid_user: user } }
+
+    context 'with valid parameters' do
+      it 'creates a new shelf' do
+        expect {
+          post api_v1_shelves_path, params: { shelf: valid_attributes }
+        }.to change(Shelf, :count).by(1)
+      end
+
+      it 'redirects to the created shelf' do
+        post api_v1_shelves_path, params: { shelf: valid_attributes }
+        expect(response).to redirect_to(api_v1_shelf_path(Shelf.last))
+      end
+    end
+
+    context 'with invalid parameters' do
+      it "doesn't create a new shelf" do
+        expect {
+          post api_v1_shelves_path, params: { shelf: invalid_attributes }
+        }.to change(Shelf, :count).by(0)
+      end
     end
   end
 end
