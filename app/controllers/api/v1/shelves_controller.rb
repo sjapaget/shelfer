@@ -3,6 +3,12 @@ class Api::V1::ShelvesController < ApiController
     @shelves = policy_scope(Shelf)
   end
 
+  def show
+    @shelf = Shelf.find(params[:id])
+
+    authorize @shelf
+  end
+
   def create
     @shelf = Shelf.new(shelf_params)
 
