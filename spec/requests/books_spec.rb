@@ -62,4 +62,31 @@ RSpec.describe "/api/v1/books", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    let!(:book_to_delete) { create(:book, user: user) }
+    let(:alt_user) { create(:user, :alt) }
+    let!(:permission_denied_book) { create(:book, user: alt_user) }
+
+    context "when the book belongs to the user" do
+      it "destroys the book" do
+        expect { delete api_v1_book_path(book_to_delete) }.to change(Book, :count).by(-1)
+      end
+
+      it "returns a confirmation of success" do
+        expect(response).to be_successful
+      end
+    end
+
+    context "when the user doesn't have permission to destory the book" do
+      it "does not destroy the book" do
+        expect { delete api_v1_book_path(permission_denied_book) }.to change(Book, :count).by(0)
+      end
+
+      it "returns a permission denied message" do
+        expect(response).to be_forbidden
+        # expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end
