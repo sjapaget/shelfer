@@ -5,7 +5,7 @@ RSpec.describe Shelf, type: :model do
   describe '#titles' do
     context "when shelf empty" do
       let(:empty_shelf) { build(:shelf) }
-      
+
       it "returns a 'shelf empty' message" do
         message = empty_shelf.titles
         expect(message).to be_a(String)
@@ -14,9 +14,10 @@ RSpec.describe Shelf, type: :model do
     end
 
     context 'when shelf has placements' do
-      let(:shelf) { create(:shelf) }
-      let(:book_one) { create(:book, title: 'Book One') }
-      let(:book_two) { create(:book, title: 'Book Two') }
+      let(:user) { create(:user, :alt) }
+      let(:shelf) { create(:shelf, user: user) }
+      let(:book_one) { create(:book, title: 'Book One', user: user) }
+      let(:book_two) { create(:book, title: 'Book Two', user: user) }
 
       before do
         create(:placement, book: book_one, shelf: shelf)
@@ -29,6 +30,20 @@ RSpec.describe Shelf, type: :model do
         expect(titles).to include(book_one.title)
         expect(titles).to include(book_two.title)
       end
+    end
+  end
+
+  describe '#books' do
+    let!(:this_user) { create(:user, email: "alt-for-#books@email-example.fr") }
+    let(:book) { create(:book, user: this_user) }
+    let(:contributor) { create(:contributor, user: this_user) }
+    let!(:contribution) { create(:contribution, book: book, contributor: contributor) }
+    let(:shelf) { create(:shelf, user: this_user) }
+    let!(:placement) { create(:placement, shelf: shelf, book: book) }
+
+    it 'returns the book title and contributor names & roles for all its placements' do
+      result = shelf.books
+      expect(result).to include({ title: book.title, contributors: book.contributors })
     end
   end
 end

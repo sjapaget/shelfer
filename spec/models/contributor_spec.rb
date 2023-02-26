@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Contributor, type: :model do
   describe "#role" do
+    let(:user) { create(:user) }
     let(:book) { build(:book) }
-    let(:contributor) { build(:contributor) }
+    let(:contributor) { build(:contributor, user: user) }
     let!(:contribution) { create(:contribution, book: book, contributor: contributor) }
     it "returns the role of the contributor for a given book" do
       result = contributor.role(book)

@@ -2,6 +2,7 @@ class Book < ApplicationRecord
 
   has_many :placements, dependent: :destroy
   has_many :contributions, dependent: :destroy
+  belongs_to :user, optional: true
 
   validates :title, :number_of_pages, :blurb, presence: true
 
@@ -15,6 +16,8 @@ class Book < ApplicationRecord
   end
 
   def authors
-    contributors.select { |contributor| contributor[:role] == 'author' }
+    contributions.includes(:contributor)
+                 .where(role: 'author')
+                 .map { |contribution| { role: contribution.role, name: contribution.contributor.name } }
   end
 end

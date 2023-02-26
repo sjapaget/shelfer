@@ -9,4 +9,14 @@ class Shelf < ApplicationRecord
      titles = placements.map { |placement| placement.book.title }
      titles.empty? ? 'Shelf empty' : titles
   end
+
+  def books
+    placements.map do |placement|
+      {
+        title: placement.book.title,
+        contributors: placement.book.contributors
+      }
+    end
+  end
+
 end
