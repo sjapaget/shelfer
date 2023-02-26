@@ -72,7 +72,6 @@ RSpec.describe "/api/v1/books", type: :request do
 
   describe 'PATCH /update' do
     context "with valid parameters" do
-
       it "updates the specified book" do
         patch api_v1_book_path(book), params: { book: { title: "Updated title" } }
         book.reload
