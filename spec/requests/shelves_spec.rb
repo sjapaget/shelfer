@@ -79,7 +79,7 @@ RSpec.describe "Shelves", type: :request do
       it "updates the specified shelf" do
         patch api_v1_shelf_path(shelf), params: { shelf: { name: "Updated Shelf" } }
         shelf.reload
-        expect(shelf.name).to eq('Updated shelf')
+        expect(shelf.name).to eq('Updated Shelf')
       end
 
       it 'redirects to the shelf' do

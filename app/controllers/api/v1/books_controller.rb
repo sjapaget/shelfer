@@ -28,7 +28,7 @@ class Api::V1::BooksController < ApiController
     if @book.update(book_params)
       redirect_to api_v1_book_path(@book)
     else
-      render json: @book.errors
+      render json: @book.errors, status: :not_modified
     end
   end
 

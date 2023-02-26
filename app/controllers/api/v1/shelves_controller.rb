@@ -20,6 +20,16 @@ class Api::V1::ShelvesController < ApiController
     authorize @shelf
   end
 
+  def update
+    @shelf = Shelf.find(params[:id])
+    authorize @shelf
+    if @shelf.update(shelf_params)
+      redirect_to api_v1_shelf_path(@shelf)
+    else
+      render json: @shelf.errors, status: :not_modified
+    end
+  end
+
   def destroy
     @shelf = Shelf.find(params[:id])
 
