@@ -4,11 +4,15 @@ class ShelfPolicy < ApplicationPolicy
   end
 
   def show?
-    user.id == record.user_id
+    user_is_owner?
+  end
+
+  def update?
+    user_is_owner?
   end
 
   def destroy?
-    user.id == record.user_id
+    user_is_owner?
   end
 
   class Scope < Scope

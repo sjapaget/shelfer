@@ -21,10 +21,4 @@ class BookPolicy < ApplicationPolicy
       scope.all
     end
   end
-
-  private
-
-  def user_is_owner?
-    user.id == record.user_id
-  end
 end
