@@ -30,6 +30,6 @@ class Api::V1::BooksController < ApiController
   private
 
   def book_params
-    params.require(:book).permit(:title, :number_of_pages, :blurb)
+    params.require(:book).permit(:title, :number_of_pages, :blurb, :user_id)
   end
 end
