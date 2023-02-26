@@ -20,6 +20,16 @@ class Api::V1::ShelvesController < ApiController
     authorize @shelf
   end
 
+  def destroy
+    @shelf = Shelf.find(params[:id])
+
+    authorize @shelf
+    @shelf.destroy
+    redirect_to api_v1_shelves_path
+  end
+
+  private
+
   def shelf_params
     params.require(:shelf).permit(:name, :description, :user_id)
   end

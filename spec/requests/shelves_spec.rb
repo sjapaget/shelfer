@@ -81,13 +81,13 @@ RSpec.describe "Shelves", type: :request do
 
     context 'when the shelf belongs to the user' do
       it 'destroys the shelf' do
-        expect { delete api_v1_shelf_path(shelf_to_delete).to change(Shelf, :count).by(-1) }
+        expect { delete api_v1_shelf_path(shelf_to_delete) }.to change(Shelf, :count).by(-1)
       end
     end
 
     context "when the shelf does not belong to the user" do
       it 'does not destroy the shelf' do
-        expect { delete api_v1_shelf_path(permission_denied_shelf).to change(Shelf, :count).by(0) }
+        expect { delete api_v1_shelf_path(permission_denied_shelf) }.to change(Shelf, :count).by(0)
       end
 
       it 'response has status 403 - forbidden' do
