@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :contributor do
     name { 'Test Contributor' }
-    association :user
+    user
   end
 
   trait :alt_name do

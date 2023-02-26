@@ -5,7 +5,7 @@ RSpec.describe Shelf, type: :model do
   describe '#titles' do
     context "when shelf empty" do
       let(:empty_shelf) { build(:shelf) }
-      
+
       it "returns a 'shelf empty' message" do
         message = empty_shelf.titles
         expect(message).to be_a(String)
@@ -14,9 +14,10 @@ RSpec.describe Shelf, type: :model do
     end
 
     context 'when shelf has placements' do
-      let(:shelf) { create(:shelf) }
-      let(:book_one) { create(:book, title: 'Book One') }
-      let(:book_two) { create(:book, title: 'Book Two') }
+      let(:user) { create(:user, :alt) }
+      let(:shelf) { create(:shelf, user: user) }
+      let(:book_one) { create(:book, title: 'Book One', user: user) }
+      let(:book_two) { create(:book, title: 'Book Two', user: user) }
 
       before do
         create(:placement, book: book_one, shelf: shelf)

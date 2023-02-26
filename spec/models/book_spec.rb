@@ -25,9 +25,11 @@ RSpec.describe Book, type: :model do
   end
 
   describe '#contributors' do
-    let(:book)                { create(:book) }
-    let(:book_author)         { create(:contributor) }
-    let(:book_editor)         { create(:contributor, :alt_name, user: create(:user, :alt)) }
+    let(:user)                { create(:user) }
+    let(:alt_user)            { create(:user, :alt) }
+    let(:book)                { create(:book, user: user) }
+    let(:book_author)         { create(:contributor, user: user) }
+    let(:book_editor)         { create(:contributor, :alt_name, user: alt_user) }
     let!(:contribution)       { create(:contribution, :author, contributor: book_author, book: book) }
     let!(:other_contribution) { create(:contribution, :editor, contributor: book_editor, book: book) }
 

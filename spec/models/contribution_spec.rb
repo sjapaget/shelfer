@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Contribution, type: :model do
+  let(:user) { create(:user) }
   let(:contribution) { build(:contribution, :author) }
   let(:book) { build(:book) }
-  let(:contributor) { build(:contributor) }
+  let(:contributor) { build(:contributor, user: user) }
 
   describe "#unique_combination_of_book_contributor_and_role" do
     context "when combo of book, contributor & role already exists" do
