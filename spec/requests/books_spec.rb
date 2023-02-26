@@ -81,7 +81,6 @@ RSpec.describe "/api/v1/books", type: :request do
 
       it "redirects to the book" do
         patch api_v1_book_path(book), params: { book: { title: "Updated title" } }
-        book.reload
         expect(response).to redirect_to(api_v1_book_path(book))
       end
 

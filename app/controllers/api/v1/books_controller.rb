@@ -20,6 +20,18 @@ class Api::V1::BooksController < ApiController
     authorize @book
   end
 
+  def update
+    @book = Book.find(params[:id])
+
+    authorize @book
+
+    if @book.update(book_params)
+      redirect_to api_v1_book_path(@book)
+    else
+      render json: @book.errors
+    end
+  end
+
   def destroy
     @book = Book.find(params[:id])
     authorize @book

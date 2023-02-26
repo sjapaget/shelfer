@@ -7,8 +7,12 @@ class BookPolicy < ApplicationPolicy
     true
   end
 
+  def update?
+    user_is_owner?
+  end
+
   def destroy?
-    user.id == record.user_id
+    user_is_owner?
   end
 
   class Scope < Scope
@@ -16,5 +20,11 @@ class BookPolicy < ApplicationPolicy
     def resolve
       scope.all
     end
+  end
+
+  private
+
+  def user_is_owner?
+    user.id == record.user_id
   end
 end
