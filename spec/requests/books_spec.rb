@@ -83,6 +83,11 @@ RSpec.describe "/api/v1/books", type: :request do
       it "does not destroy the book" do
         expect { delete api_v1_book_path(permission_denied_book) }.to change(Book, :count).by(0)
       end
+
+      it 'response has status 403 - forbidden' do
+        delete api_v1_book_path(permission_denied_book)
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end
