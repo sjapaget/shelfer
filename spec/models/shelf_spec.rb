@@ -34,13 +34,16 @@ RSpec.describe Shelf, type: :model do
   end
 
   describe '#books' do
-    let(:shelf) { build(:shelf) }
-    let(:book) { build(:book, :with_contributor, title: 'Testing #books') }
-    let(:placement) { build(:placement, shelf: shelf, book: book) }
+    let!(:this_user) { create(:user, email: "alt-for-#books@email-example.fr") }
+    let(:book) { create(:book, user: this_user) }
+    let(:contributor) { create(:contributor, user: this_user) }
+    let!(:contribution) { create(:contribution, book: book, contributor: contributor) }
+    let(:shelf) { create(:shelf, user: this_user) }
+    let!(:placement) { create(:placement, shelf: shelf, book: book) }
 
-    it 'returns the book title and contributors for all its placements' do
+    it 'returns the book title and contributor names & roles for all its placements' do
       result = shelf.books
-      expect(result).to include(book.title, book.contributor.name)
+      expect(result).to include({ title: book.title, contributors: book.contributors })
     end
   end
 end

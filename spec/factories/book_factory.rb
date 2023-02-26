@@ -17,10 +17,11 @@ FactoryBot.define do
   end
 
   trait :with_contributor do
-    association :contributors, factory: :contributor
-    after(build) do |book|
-      build(:contributor)
-      build(:contribution, book_id: book.id, contributor: contributor.id)
+    association :contributions, factory: :contribution
+    after(:build) do |book|
+      build(:user, email: 'for-contribs@factory.fr')
+      build(:contributor, user: user)
+      build(:contribution, book_id: book.id, contributor_id: contributor.id)
     end
   end
 end
