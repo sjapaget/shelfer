@@ -4,6 +4,8 @@ RSpec.describe "/api/v1/books", type: :request do
   let(:user) { create(:user) }
   let!(:book) { create(:book, user: user) }
   let!(:another_book) { create(:book, user: user) }
+  let(:alt_user) { create(:user, :alt) }
+  let!(:permission_denied_book) { create(:book, user: alt_user) }
 
   before do
     sign_in user
@@ -68,10 +70,32 @@ RSpec.describe "/api/v1/books", type: :request do
     end
   end
 
+  describe 'PATCH /update' do
+    context "with valid parameters" do
+
+      it "updates the specified book" do
+        patch api_v1_book_path(book), params: { book: { title: "Updated title" } }
+        book.reload
+        expect(book.title).to eq('Updated title')
+      end
+
+      it "redirects to the book" do
+        patch api_v1_book_path(book), params: { book: { title: "Updated title" } }
+        book.reload
+        expect(response).to redirect_to(api_v1_book_path(book))
+      end
+
+      it "only allows users to update books they created" do
+        patch api_v1_book_path(permission_denied_book), params: { book: { title: "Updated title" } }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+    end
+
+  end
+
   describe "DELETE /destroy" do
     let!(:book_to_delete) { create(:book, user: user) }
-    let(:alt_user) { create(:user, :alt) }
-    let!(:permission_denied_book) { create(:book, user: alt_user) }
 
     context "when the book belongs to the user" do
       it "destroys the book" do
