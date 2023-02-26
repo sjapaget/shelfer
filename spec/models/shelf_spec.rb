@@ -32,4 +32,15 @@ RSpec.describe Shelf, type: :model do
       end
     end
   end
+
+  describe '#books' do
+    let(:shelf) { build(:shelf) }
+    let(:book) { build(:book, :with_contributor, title: 'Testing #books') }
+    let(:placement) { build(:placement, shelf: shelf, book: book) }
+
+    it 'returns the book title and contributors for all its placements' do
+      result = shelf.books
+      expect(result).to include(book.title, book.contributor.name)
+    end
+  end
 end

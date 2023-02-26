@@ -15,4 +15,12 @@ FactoryBot.define do
     blurb { "Ok, so the first book didn't quite have it all..." }
     number_of_pages { 15 }
   end
+
+  trait :with_contributor do
+    association :contributors, factory: :contributor
+    after(build) do |book|
+      build(:contributor)
+      build(:contribution, book_id: book.id, contributor: contributor.id)
+    end
+  end
 end
