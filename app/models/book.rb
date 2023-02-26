@@ -16,6 +16,8 @@ class Book < ApplicationRecord
   end
 
   def authors
-    contributors.select { |contributor| contributor[:role] == 'author' }
+    contributions.includes(:contributor)
+                 .where(role: 'author')
+                 .map { |contribution| { role: contribution.role, name: contribution.contributor.name } }
   end
 end
