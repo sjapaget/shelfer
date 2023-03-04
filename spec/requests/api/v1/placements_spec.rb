@@ -1,9 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Placements", type: :request do
+  let(:user) { create(:user) }
+
+  before do
+    sign_in user
+  end
+  
   describe "POST /create" do
-    let(:valid_attributes) { {} }
-    let(:invalid_attributes) { {} }
+    let(:book) { create(:book, user: user) }
+    let(:shelf) { create(:shelf, user: user) }
+    let(:valid_attributes) { { book_id: book.id, shelf_id: shelf.id } }
+    let(:invalid_attributes) { { book_id: 'NaN', shelf_id: 'null' } }
 
     context 'with valid parameters' do
       it 'creates a new placemet' do
