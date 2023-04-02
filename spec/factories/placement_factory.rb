@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :placement do
-    association :book
-    association :shelf
+    book
+    shelf
   end
 end

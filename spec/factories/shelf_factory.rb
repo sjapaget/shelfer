@@ -1,6 +1,10 @@
 FactoryBot.define do
+  sequence :name do |n|
+    "shelf name #{n}"
+  end
+
   factory :shelf do
-    name { 'My Test Shelf' }
+    name { generate :name }
     description { 'A lovely shelf for Tests' }
     user
 
