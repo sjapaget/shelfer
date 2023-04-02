@@ -43,7 +43,7 @@ RSpec.describe Shelf, type: :model do
 
     it 'returns the book title and contributor names & roles for all its placements' do
       result = shelf.books
-      expect(result).to include({ id: book.id, title: book.title, contributors: book.contributors })
+      expect(result).to include({ placement_id: placement.id, book_id: book.id, title: book.title, contributors: book.contributors })
     end
   end
 end
