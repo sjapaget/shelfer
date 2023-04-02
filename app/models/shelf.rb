@@ -13,6 +13,7 @@ class Shelf < ApplicationRecord
   def books
     placements.map do |placement|
       {
+        id: placement.book.id,
         title: placement.book.title,
         contributors: placement.book.contributors
       }
