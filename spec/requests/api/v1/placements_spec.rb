@@ -41,8 +41,8 @@ RSpec.describe "Api::V1::Placements", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let(:alt_user) { create(:user) }
-    let!(:placement_to_delete) { create(:placement) }
+    let (:user_shelf) { create(:shelf, user: user) }
+    let!(:placement_to_delete) { create(:placement, shelf: user_shelf) }
     let!(:permission_denied_placement) { create(:placement) }
 
     context 'when the placement belongs to the user' do

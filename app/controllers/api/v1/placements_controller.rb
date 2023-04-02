@@ -10,6 +10,14 @@ class Api::V1::PlacementsController < ApplicationController
     authorize @placement
   end
 
+  def destroy
+    @placement = Placement.find(params[:id])
+
+    authorize @placement
+
+    @placement.destroy
+  end
+
   private
 
   def placement_params

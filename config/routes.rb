@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :shelves, only: %I[index show create update destroy]
       resources :books, only: %I[index show create update destroy]
-      resources :placements, only: %I[create]
+      resources :placements, only: %I[create destroy]
     end
   end
 end
