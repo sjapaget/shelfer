@@ -1,4 +1,5 @@
-class Api::V1::PlacementsController < ApplicationController
+class Api::V1::PlacementsController < ApiController
+
   def create
     @placement = Placement.new(placement_params)
   
